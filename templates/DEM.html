@@ -1,0 +1,530 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>EFarmX Ecosystem</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta name="author" content=""> {% load static %}
+<style>
+
+  .scroll {
+    max-height: 600px;
+    overflow-y: scroll;
+    width: 250px
+  }
+  label{
+    color:black;
+  }
+</style>
+    
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    
+    <link rel="stylesheet" href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{%static 'lib/animate/animate.min.css' %}">
+
+
+
+    <link rel="stylesheet" href="{% static 'style2.css' %}">
+    <script>
+      {{ map.header.render|safe }}
+      {{ MyField.header.render|safe }}
+      {{ Sentinel_Imagery.header.render|safe }}
+      {{ NDVI.header.render|safe }}
+      {{ EVI.header.render|safe }} 
+      {{ MSAVI.header.render|safe }}  
+      {{ NDWI.header.render|safe }}  
+      {{ precipitation.header.render|safe }}  
+      {{ Acres.header.render|safe }} 
+      {{ Hectares.header.render|safe }} 
+      {{ Kilometers.header.render|safe }} 
+      {{ areameters.header.render|safe }} 
+      {{ LandUseLandCover.header.render|safe }} 
+      {{ True_Colour.header.render|safe }} 
+      {{ False_Colour.header.render|safe }}   
+      {{ Crop_Health.header.render|safe }}
+      {{ LST.header.render|safe }}
+      {{ soil_moisture.header.render|safe }}
+      {{ ThreeD.header.render|safe }}
+      {{ DEM.header.render|safe }}
+
+
+
+     </script> 
+      <!-- Libraries Stylesheet -->
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+
+    <!-- Template Stylesheet -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+
+<body>
+ <!-- Spinner Start -->
+ <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+<!-- Spinner End -->
+
+
+<!-- Navbar Start -->
+<nav class="navbar navbar-expand-lg bg-white navbar-light shadow border-top border-1 border-light sticky-top p-0">
+  {% comment %} <!-- <a href="index.html" class="navbar-brand bg-light d-flex align-items-center px-4 px-lg-5"></a> --> {% endcomment %}
+  <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+  
+      <div class="navbar-nav" style="background-color:black; width: 100%">
+        
+          
+            <div class="nav-item dropdown" style="color:red;">
+                <a class="navbar-brand" id="menu-toggle" href="#">
+                    <div style="margin-left: 12px">
+
+                    <i class="fa fa-bars fa-2x" style="color:white"></i>
+                    <br>
+                    <small style="font-size:12px; color:white">Menu</small> 
+                    </div>
+                </a>                    
+                
+                <div class="dropdown-menu fade-up m-0">
+                  <div class="scroll" style="font-size:12px">
+
+                    <li>
+                        <a  style="font-size:18px" href="" class="dropdown-item"><i class="fa fa-fw fa-home fa-m-fix"></i> Ecosystem</a>
+                    </li>
+                    <li>
+                        <hr class="sidebar-hr">
+                    </li>
+                    <li style="font-size:18px" class="sidebar-sub-brand">
+                        <a href="<%= efarmxURL %>" class="dropdown-item"><i class="fa fa-fw fa-indent fa-m-fix text-primary me-1"></i> Financials</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-calculator fa-m-fix text-info"></i> Closing Stock</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-product-hunt fa-m-fix text-info"></i> Product</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-database fa-m- text-info"></i> Inventory</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-money fa-m-fix text-info"></i> Sales</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-clipboard fa-m-fix text-info"></i> Expenditures</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-wrench fa-m- text-info"></i> Cashflow Projection</a>
+                    </li>
+                    <li>
+                        <hr class="sidebar-hr sidebar-short">
+                    </li>
+
+
+                    
+                    <li class="sidebar-sub-brand">
+                        <a style="font-size:18px" href=""class="dropdown-item"><i class="fa fa-fw fa-indent fa-m-fix text-primary me-1"></i> Actions</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-map-marker fa-m-fix text-info"></i> Fields/Sheds/Yards</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-tasks fa-m-fix text-info"></i> Tasks</a>
+                    </li>
+                    <!-- <li> -->
+                    <!-- <a href="<%= efarmxURL + 'weather/create' %>"><i class="fa fa-fw fa-skyatlas fa-m-fix"></i> AutoWeather</a> -->
+                    <!-- </li> -->
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-retweet fa-m-fix text-info"></i> Grazing Rotation</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-th fa-m-fix text-info"></i> Forage/Crop Rotation</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-anchor fa-m-fix text-info"></i> Weighbridge</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-users fa-m-fix text-info"></i> Staff</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-flask fa-m-fix text-info"></i> Soil Analysis</a>
+                    </li>
+                    <li>
+                        <hr class="sidebar-hr sidebar-short">
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <a style="font-size:18px" href="" class="dropdown-item"><i class="fa fa-fw fa-indent fa-m-fix text-primary me-1"></i> Animal Management</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-balance-scale fa-m-fix text-info"></i> Grassland Management</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-microchip fa-m-fix text-info"></i> Flock Register</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-file fa-m-fix text-info"></i> Flock Dispatch Record</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-venus-mars fa-m-fix text-info"></i> Animal Registration</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-sticky-note fa-m-fix text-info"></i> Replacement Animal Document</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-truck fa-m-fix text-info"></i> Temporary Animal Movement</a>
+                    </li>
+                    <li>
+                        <hr class="sidebar-hr sidebar-short">
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <a style="font-size:18px" href="" class="dropdown-item"><i class="fa fa-fw fa-indent fa-m-fix text-primary me-1"></i> Nitrate Management</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-leaf fa-m-fix text-success"></i> Fertiliser Planning</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-paw fa-m-fix text-success"></i> Movement of Organic Fertiliser</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-cubes fa-m-fix text-success"></i> Storage Capacity</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-codepen fa-m-fix text-success"></i> Rainfall Storage</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-cube fa-m-fix text-success"></i> Storage Tank Capacity</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-hourglass-end fa-m-fix text-success"></i> Nitrate Limit Per Hectare</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-sliders fa-m-fix text-success"></i> Max Available Nitrogen Allow.</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-recycle fa-m-fix text-success"></i> Source of Nitrogen</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-sliders fa-m-fix text-success"></i> Max Available Phosphorus Allow.</a>
+                    </li>
+                    <li>
+                        <a href="" class="dropdown-item"><i class="fa fa-fw fa-recycle fa-m-fix text-success"></i> Source of Phosphorus</a>
+                    </li>
+                  
+              </div>
+                </div>
+            </div>
+
+            
+        <!-- </div> -->
+
+
+            <a class="navbar-brand navbar-brand-fa-fix" style="font-size: 14px;margin-left:11px; color:white;" href="/">
+                EFarmX<small style="margin-top: 3px;">Data<br>Harvesting<br>Ecosystem <sup>TM</sup></small>
+            </a>
+            <div class="nav-item dropdown">
+              <li>
+                <a href="#"  class="nav-link" data-bs-toggle="dropdown"> <i class="fa fa-fw fa-indent text-info"></i>Financials <i class="fa fa-fw fa-caret-down"></i></a> 
+              </li>
+
+                <div class="dropdown-menu fade-up m-0">
+                  <li>
+                    <a href="http://localhost:8081/satelliteAnalysis/satelliteAnalysis" class="dropdown-item"><i class="fa fa-fw fa-line-chart text-success me-2"></i> Accounting Year</a>
+                  </li>
+                  <br>
+                   
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-calculator text-success me-2"></i> Closing Stock</a>
+                  </li>
+                  <br>
+
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-database text-success me-2"></i> Inventory</a>
+                  </li> 
+                  <br>
+
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-money text-success me-2"></i> Sales</a>
+                  </li>
+                  <br>
+
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-clipboard text-success me-2"></i> Expenditures</a>
+                  </li> 
+                  <br>  
+                                     
+                
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-wrench text-success me-2"></i> Cashflow Projection</a>
+                  </li>
+
+                </div>
+            </div>
+
+            <div class="nav-item dropdown">
+                <a href="#"  class="nav-link" data-bs-toggle="dropdown"> <i class="fa fa-fw fa-indent text-info"></i>Actions <i class="fa fa-fw fa-caret-down"></i></a> 
+                <div class="dropdown-menu fade-up m-0">
+                  <li>
+                    <a href="#" class="dropdown-item"><i class="fa fa-fw fa-map-marker text-info me-2"></i>Fields/Sheds/Yards</a>
+                  </li>
+                  <br>
+
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-tasks text-info me-2"></i>Tasks</a>
+                  </li>
+                  <br>
+      
+
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-skyatlas text-info me-2"></i>AutoWeather</a>
+                  </li>
+                  <br>
+
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-retweet text-info me-2"></i> Grazing Rotation</a>
+                  </li> 
+                  <br>
+
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-th text-info me-2"></i> Forage/Crop Rotation</a>
+                  </li>
+                  <br>
+
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-anchor text-info me-2"></i> Weighbridge</a>
+                  </li> 
+                  <br>  
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-users text-info me-2"></i> Staff</a>
+                  </li> 
+                  <br> 
+                                     
+        
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-flask text-info me-2"></i> Soil Analysis</a>
+                  </li>
+
+                </div>
+            </div>
+            <div class="nav-item dropdown">
+                <a href="#"  class="nav-link" data-bs-toggle="dropdown"> <i class="fa fa-fw fa-indent text-info"></i>Telemetry <i class="fa fa-fw fa-caret-down"></i></a> 
+                <div class="dropdown-menu fade-up m-0">
+                  <li>
+                    <a href="{% url 'map'%}" class="dropdown-item"><i class="fa fa-fw fa-anchor text-success me-2"></i> Satellite Analysis</a>
+                  </li> 
+                  <br>  
+                  <li>
+                    <a href="{% url 'ThreeD' %}" class="dropdown-item"><i class="fa fa-fw fa-users text-success me-2"></i> 3D Terrain Analysis</a>
+                  </li> 
+                  <br> 
+                            
+                  <li>
+                    <a href="" class="dropdown-item"><i class="fa fa-fw fa-flask text-success me-2"></i> GPS Monitor</a>
+                  </li>
+
+                </div>
+            </div>
+
+
+
+
+          <div  style="margin-left: 520px;">
+            <div class="navbar-nav">
+              <div class="nav-item dropdown" >
+                  <a class="navbar-brand" id="menu-toggle" href="#">
+                      <div style="margin-left:12px; color: white">
+                      <i class="fa fa-plus fa-2x"></i>
+                      <br>
+                      <small style="font-size:12px; margin-left:0px;color: white">New</small>
+                      </div>
+                  </a>                    
+                  
+              <div class="dropdown-menu fade-up m-0">
+                    {% comment %} <a href="feature.html" class="dropdown-item">Features</a>
+                    <a href="team.html" class="dropdown-item">Our Team</a>
+                    <a href="testimonial.html" class="dropdown-item">Testimonial</a> {% endcomment %}
+          </div>
+      </div>
+
+
+          <div class="navbar-nav">
+              <div class="nav-item dropdown" style="margin-left: 20px;">
+                  <a class="navbar-brand" id="menu-toggle" href="#">
+                      <div style="margin-left: 12px; color: white">
+                        
+                          <i class="fa fa-solid fa-user fa-2x"></i>
+                       <br>
+                      <small style="font-size:12px; margin-left:0px; color: white">User</small>
+                      </div>
+                  </a>                    
+                  
+              <div class="dropdown-menu fade-up m-0">
+                    {% comment %} <a href="feature.html" class="dropdown-item">Features</a>
+                    <a href="team.html" class="dropdown-item">Our Team</a>
+                    <a href="testimonial.html" class="dropdown-item">Testimonial</a> {% endcomment %}
+          </div>
+      </div>
+    </div>
+
+</nav>
+<!-- Navbar End -->
+<div class="titlesection">
+    <h3> <span class="mapsection">3D Surface | Subsurface Rendering: </span>  <span class="Analysissection">Imagery Analysis</span></h3> 
+  </div> 
+
+    <div class="maparea">
+      {{Sentinel_Imagery.html.render|safe}}
+      {{map.html.render|safe}}
+      {{MyField.html.render|safe}}  
+      {{NDVI.html.render|safe}}  
+      {{EVI.html.render|safe}} 
+      {{MSAVI.html.render|safe}} 
+      {{NDWI.html.render|safe}}
+      {{precipitation.html.render|safe}} 
+      {{areameters.html.render|safe}}
+      {{Acres.html.render|safe}}
+      {{Hectares.html.render|safe}}
+      {{Kilometers.html.render|safe}} 
+      {{LandUseLandCover.html.render|safe}}
+      {{True_Colour.html.render|safe}} 
+      {{False_Colour.html.render|safe}} 
+      {{Crop_Health.html.render|safe}}
+      {{LST.html.render|safe}} 
+      {{soil_moisture.html.render|safe}} 
+      {{ThreeD.html.render|safe}} 
+      {{DEM.html.render|safe}} 
+
+
+
+      
+    </div>
+  
+  <!--compenents start-->
+  <div class="compenents">
+
+  <!--Region Select start-->
+  <label style="color: white" for="Selectregion_dropdown">Field | Area</label><br>
+  <select class="drop_select" onchange="location = this.value;">
+        <option value="" selected disabled> Select Region/Field</option>
+        <option value="{% url 'MyField' %}">Field 1</option>
+        <option value="option2">Field 2</option>
+        <option value="option3">Field 3</option>
+      </select>
+      <br>
+      <br>
+  
+  <!--Region Select End-->
+  <label style="color: white" >Area Measured:</label><br>
+  {% comment %} <p>Age: {{ Total_AreaSqKm }}</p> {% endcomment %}
+  
+  <textarea style="background:black; color:white" rows="1" cols="33" readonly>{{ areaestimate1 }}</textarea>
+  <br>
+  <br>
+  <!--Area Units (Auto selects) start-->
+      <label style="color: white"  for="Area_Units_dropdown">Area Unit (Auto selects):</label><br>
+      <select class="drop_select" onchange="location = this.value;">
+        <option selected disabled>Select Area Unit</option>
+        <option value="{% url 'areameters' %}">Meters</option>
+        <option value="{% url 'Acres' %}">Acres(s)</option>
+        <option value="{% url 'Hectares' %}">Hectares</option>
+        <option value="{% url 'Kilometers' %}">Kilometers</option>      
+      </select>
+      <br>
+      <br>
+  <!--Area Units (Auto selects) End-->
+  
+  
+
+  
+  
+  <!--Surface Analysis: start-->
+  <label style="color: white"  for="Satelite_Data_dropdown">Surface Analysis::</label><br>
+  <select style="background: black; color:white" class="drop_select" onchange="location = this.value;">
+    <option value="" selected disabled>Select an Option</option>
+    <option value="{% url 'Sentinel_Imagery' %}">Topographic Elevation</option>
+    <option value="#">Digital Elevation Model</option>
+    <option value="#">Topographic Volume Calculation</option>
+    <option value="#">Average Slope Gradient</option>
+    <option value="#">Geological Map</option>
+
+  </select>
+  <br>
+  <br>
+  <!--Surface Analysis: End-->
+  
+  <!--Variable/spectral analysis start-->
+      <label style="color: white"  for="spectral_dropdown">Subsurface Analysis:</label>
+      <select class="drop_select" onchange="location = this.value;">
+        <option value="" selected disabled>Select an Option</option>
+        <option value="#">Soil Type</option>
+        <option value="#">Soil Type</option>
+        <option value="#">Soil Type</option>
+        <option value="#">Soil Type</option>
+        <option value="#">Soil Type</option>
+        <option value="#">Soil Type</option>
+
+
+
+   
+      </select>
+    <br>
+    <br>
+  <!--Variable/spectral analysis End-->
+  
+  <label style="color: white"  for="Analysis_dropdown">Analysis Chart:</label><br>
+  
+
+</div>
+  <!--compenents End-->
+    <script>
+      {{ map.script.render|safe }}
+      {{ MyField.script.render|safe }}
+      {{ Sentinel_Imagery.script.render|safe }}
+      {{ NDVI.script.render|safe }}
+      {{ EVI.script.render|safe }}
+      {{ MSAVI.script.render|safe }}
+      {{ NDWI.script.render|safe }}
+      {{ precipitation.script.render|safe }}
+      {{ areameters.script.render|safe }}
+      {{ Acres.script.render|safe }}
+      {{ Hectares.script.render|safe }}
+      {{ Kilometers.script.render|safe }} 
+      {{ LandUseLandCover.script.render|safe }}  
+      {{ True_Colour.script.render|safe }}  
+      {{ False_Colour.script.render|safe }}  
+      {{ Crop_Health.script.render|safe }}  
+      {{ LST.script.render|safe }}
+      {{ soil_moisture.script.render|safe }}
+      {{ ThreeD.script.render|safe }}
+      {{ DEM.script.render|safe }}
+
+
+    </script>
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="static/lib/wow/wow.min.js"></script>
+<script src="static/lib/easing/easing.min.js"></script>
+<script src="static/lib/waypoints/waypoints.min.js"></script>
+<script src="static/lib/counterup/counterup.min.js"></script>
+<script src="static/lib/owlcarousel/owl.carousel.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="static/js/main.js"></script>
+</body>
+
+</html>

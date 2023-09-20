@@ -1,0 +1,709 @@
+<% var efarmxURL = "/" %>
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144180010-1"></script>
+        <script src="https://www.google.com/recaptcha/enterprise.js?render=<%= locals.env.GCAPCHAKEY%>"></script>
+        <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'UA-144180010-1');
+        </script>
+
+        <meta charset="utf-8">
+        <title>EFarmX Ecosystem</title>
+        <meta name="description" content="EFarmX Ecosystem">
+        <meta name="author" content="EFarmX LTD">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="Add to Home">
+
+        <link rel="apple-touch-icon" sizes="192x192" href="/images/icon/android-chrome-192x192.png">
+
+        <link rel="icon" type="image/png" href="/images/icon/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="/images/icon/favicon-16x16.png" sizes="16x16">
+        <link rel="shortcut icon" href="/images/icon/favicon.ico">
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/dt-1.10.12/datatables.min.css" />
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <link rel="stylesheet" type="text/css" href="/css/daterangepicker.min.css">
+
+        <%- include('themeLoader') %>
+
+        <link rel="manifest" href="/manifest/manifest.json">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-formhelpers/2.3.0/css/bootstrap-formhelpers.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/animate.css">
+        <link rel="stylesheet" type="text/css" href="/css/HoldOn.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/addtohomescreen.css">
+        <link rel="stylesheet" type="text/css" href="/css/jquery.cookiebar.css">
+        <link rel="stylesheet" href="/css/aos.css" />
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Smartsupp Live Chat script -->
+        <script type="text/javascript">
+         var _smartsupp = _smartsupp || {};
+         _smartsupp.key = 'd26da63f64dadb5cb038eba18d5201728211d6eb';
+         window.smartsupp||(function(d) {
+             var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+             s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+             c.type='text/javascript';c.charset='utf-8';c.async=true;
+             c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+         })(document);
+        </script>
+        <script type="text/javascript" src="/js/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/qrcode.min.js"></script>
+        <% if (locals.user) { %>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    QRCode.toCanvas(document.getElementById('userQrCodeCanvas'), '<%- user.qrString %>');
+                    $('#printUserQrCanvas').on('click', function (e) {
+                        e.preventDefault();
+                        const canvas = $('#userQrCodeCanvas');
+
+                        const dataUrl = canvas[0].toDataURL("image/jpeg", 1.0);
+
+                        let windowContent = '<!DOCTYPE html>';
+                        windowContent += '<html>';
+                        windowContent += '<head><title>Print code</title></head>';
+                        windowContent += '<body>';
+                        windowContent += '<img src="' + dataUrl + '">';
+                        windowContent += '</body>';
+                        windowContent += '</html>';
+
+                        const printWin = window.open('', '', 'width=' + screen.availWidth + ',height=' + screen.availHeight);
+                        printWin.document.open();
+                        printWin.document.write(windowContent); 
+
+                        printWin.document.addEventListener('load', function() {
+                            printWin.focus();
+                            printWin.print();
+                            printWin.document.close();
+                            printWin.close();            
+                        }, true);
+
+                    })
+
+                    var shareUserQrCanvasButton = document.getElementById('shareUserQrCanvasButton');
+
+                    shareUserQrCanvasButton.addEventListener('click', async function () {
+                        const canvas = $('#userQrCodeCanvas');
+                        const dataUrl = canvas[0].toDataURL("image/png", 1.0);
+                        const res = await fetch(dataUrl);
+                        const blob = await res.blob();
+                        const file = new File([blob], "qrCode.png", {type: 'image/png'});
+                        var shareData = { files: [file] };
+
+                        if (navigator.canShare && navigator.canShare(shareData)) {
+
+                            shareData.title = "eBcard"
+
+                            navigator.share(shareData)
+                            .then(() => console.log('Share was successful.'))
+                            .catch((error) => console.log('Sharing failed', error));
+
+                        } else {
+                            console.log("Your system doesn't support sharing files.");
+                        }
+                    })
+                });
+
+            </script>
+        <% } %> 
+    </head>
+
+    <body id="body">
+        <script src="/js/aos.js"></script>
+        <script>
+            AOS.init();
+          </script>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" id="menu-toggle" href="#">
+                        <i class="fa fa-bars fa-2x"></i><small>Menu</small>
+                    </a>
+                    <a class="navbar-brand navbar-brand-fa-fix" href="/">
+                        EFarmX<small style="margin-top: 3px;">Data<br>Harvesting<br>Ecosystem <sup>TM</sup></small>
+                    </a>
+                    <!-- USER MENU FOR MOBILE -->
+                    <% if (locals.user) { %>
+                        <a class="navbar-brand navbar-brand-fa-fix navbar-right pull-right visible-xs-block text-center menu-toggle-user" href="#">
+                            <i class="fa fa-user-circle-o fa-2x"></i><small>User</small>
+                        </a>
+                        <a class="navbar-brand navbar-brand-fa-fix navbar-right pull-right visible-xs-block text-center menu-toggle-create" href="#">
+                            <i class="fa fa-plus fa-2x"></i><small>New</small>
+                        </a>
+                    <% } else { %>
+                        <a class="navbar-brand navbar-brand-fa-fix navbar-right pull-right visible-xs-block text-center" href="/login">
+                            <i class="fa fa-sign-in fa-2x"></i><small>Login</small>
+                        </a>
+                        <a class="navbar-brand navbar-brand-fa-fix navbar-right pull-right visible-xs-block text-center" href="/signup">
+                            <i class="fa fa-user-plus fa-2x"></i><small>Sign Up</small>
+                        </a>
+                        <a class="navbar-brand navbar-brand-fa-fix navbar-right pull-right visible-xs-block text-center" href="/quick-signup">
+                            <i class="fa fa-user-plus fa-2x"></i><small>Quick Sign Up</small>
+                        </a>
+                    <% } %>
+                </div> <!-- navbar-header ends here -->
+                <!-- USER MENU FOR DESKTOP -->
+                <% if (locals.user) { %>
+                    <div class="navbar-header pull-right hidden-xs text-center">
+                        <a class="navbar-brand navbar-brand-fa-fix pull-right menu-toggle-user" href="#">
+                            <i class="fa fa-user-circle-o fa-2x"></i><small>User</small>
+                        </a>
+                        <a class="navbar-brand navbar-brand-fa-fix pull-right menu-toggle-create" style="margin-right: 15px;" href="#">
+                            <i class="fa fa-plus fa-2x"></i><small>New</small>
+                        </a>
+                    </div>
+                <% } else { %>
+                    <div class="navbar-header pull-right hidden-xs text-center">
+                        <a class="navbar-brand navbar-brand-fa-fix pull-right" style="margin-right: 15px;" href="/login">
+                            <i class="fa fa-sign-in fa-2x"></i><small>Login</small>
+                        </a>
+                        <a class="navbar-brand navbar-brand-fa-fix pull-right" href="/signup">
+                            <i class="fa fa-user-plus fa-2x"></i><small>Sign Up</small>
+                        </a>
+                        <a class="navbar-brand navbar-brand-fa-fix pull-right" href="/quick-signup">
+                            <i class="fa fa-user-plus fa-2x"></i><small>Quick Sign Up</small>
+                        </a>
+                    </div>
+                <% } %>
+
+                <ul class="nav navbar-nav hidden-sm hidden-xs">
+
+                    <li class="dropdown">
+                        <a href="#"
+                           class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><i class="fa fa-fw fa-indent"></i>
+                            Financials <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="<%= efarmxURL + 'accounts/show' %>"><i class="fa fa-fw fa-line-chart"></i> Accounting Year</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'accounts/list' %>"><i class="fa fa-fw fa-calculator"></i> Closing Stock</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'inventory/list' %>"><i class="fa fa-fw fa-database"></i> Inventory</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'sale/list' %>"><i class="fa fa-fw fa-money"></i> Sales</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'expenditure/list' %>"><i class="fa fa-fw fa-clipboard"></i> Expenditures</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'projection/list' %>"><i class="fa fa-fw fa-wrench"></i> Cashflow Projection</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#"
+                           class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><i class="fa fa-fw fa-indent"></i>
+                            Actions <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="<%= efarmxURL + 'fields/list' %>"><i class="fa fa-fw fa-map-marker"></i> Fields/Sheds/Yards</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'tasks/list' %>"><i class="fa fa-fw fa-tasks"></i> Tasks</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'weather/list' %>"><i class="fa fa-fw fa-skyatlas"></i> AutoWeather</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'grazing/list' %>"><i class="fa fa-fw fa-retweet"></i> Grazing Rotation</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'rotation/list' %>"><i class="fa fa-fw fa-th"></i> Forage/Crop Rotation</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'weighing/list' %>"><i class="fa fa-fw fa-anchor"></i> Weighbridge</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'staff/list' %>"><i class="fa fa-fw fa-users"></i> Staff</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'soilanalysis/list' %>"><i class="fa fa-fw fa-flask"></i> Soil Analysis</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#"
+                           class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><i class="fa fa-fw fa-indent"></i>
+                            Telemetry <i class="fa fa-fw fa-caret-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                            <li>
+                                <a href="<%= efarmxURL + 'satelliteAnalysis/satelliteAnalysis' %>"><i class="fa fa-fw fa-map-o fa-m-fix"></i> Satellite Analysis</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'terrainAnalysis/terrainAnalysis' %>"><i class="fa fa-fw fa-map-o fa-m-fix"></i> 3D Terrain Analysis</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'gpsMonitor/gpsMonitor' %>"><i class="fa fa-fw fa-map-pin fa-m-fix"></i> GPS Monitor</a>
+                            </li>
+                            <!-- <li>
+                                <a href="<%= efarmxURL + 'assetMonitor' %>"><i class="fa fa-fw fa-map-pin fa-m-fix"></i> Asset Monitor</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'fieldCoPilot' %>"><i class="fa fa-fw fa-crosshairs fa-m-fix"></i> Field CoPilot&nbsp;<sup><small>TM</small></sup></a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'droneAnalysis' %>"><i class="fa fa-fw fa-arrows-alt fa-m-fix"></i> Drone Analysis</a>
+                            </li>
+                            <li>
+                                <a href="<%= efarmxURL + 'smartGlasses' %>"><i class="fa fa-fw fa-window-restore fa-m-fix"></i> Smart Glasses</a>
+                            </li> -->
+                        </ul>
+                    </li>
+                    <!--
+                    <li>
+                        <a class="nav navbar-nav hidden-sm" href="/promote"><i class="fa fa-fw fa-address-card"></i> Promote</a>
+                    </li> -->
+                  <!-- <li>
+                        <a href="/promote"><i class="fa fa-fw fa-address-card"></i> Promote</a>
+                    </li> -->
+                    <!--li>
+                         <a href="/estore"><i class="fa fa-fw fa-shopping-cart"></i> eStore</a>
+                         </li-->
+                </ul>
+            </div> <!-- container-fluid ends here -->
+        </div> <!-- navbar navbar-inverse ends here -->
+
+        <% if (locals.user) { %>
+            <!-- MENU FOR THE USER NAVIGATION -->
+            <div id="sidebar-wrapper-user" class="non-scrollify">
+                <ul class="sidebar-nav">
+                    <!-- GENERAL -->
+                    <li class="sidebar-brand">
+                        <a href="/profile"><i class="fa fa-fw fa-user-circle-o fa-m-fix"></i> <%=user.local.name.firstname%></a>
+                    </li>
+                    <li>
+                        <hr class="sidebar-hr">
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <a href="/profile"><i class="fa fa-fw fa-th-large fa-m-fix"></i> Profile</a>
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <a href="/settings"><i class="fa fa-fw fa-cogs fa-m-fix"></i> Settings</a>
+                    </li>
+                    <!-- <li class="sidebar-sub-brand">
+                        <a href="#" class="toggle-theme"><i class="fa fa-fw fa-toggle-on fa-m-fix"></i> Toggle Theme</a>
+                    </li> -->
+                    <li class="sidebar-sub-brand">
+                        <a href="/logout"><i class="fa fa-fw fa-sign-out fa-m-fix"></i> Logout</a>
+                    </li>
+                    <li>
+                        <hr class="sidebar-hr sidebar-short">
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <!-- <h4 align="center"></h4> -->
+                        <center>
+                            <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#eBcardCollapse" aria-expanded="false" aria-controls="eBcardCollapse">Your eBusiness Card:</button>
+                        </center>
+                        <div id="eBcardCollapse" class="collapse">
+                            <div id="eBcardContainer" class="center-block">  
+                                <h4 align="center"><%= user.local.name.firstname  %> </h4>    
+                                <div id="eBcardCanvasContainer">                            
+                                    <canvas id="userQrCodeCanvas"></canvas>
+                                </div>
+                            </div>
+                            <center>
+                                <button id="printUserQrCanvas" type="button" class="btn btn-default">Print</button>
+                                <button id="shareUserQrCanvasButton" type="button" class="btn btn-default">Share</button>
+                            </center>
+                        </div>  
+                    </li>
+                </ul>
+            </div>
+        <% } %>
+
+        <!-- MENU FOR CREATING NEW ENTITIES -->
+        <div id="sidebar-wrapper-create" class="non-scrollify">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-home fa-m-fix"></i> Ecosystem</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr">
+                </li>
+                <li class="sidebar-sub-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-indent fa-m-fix"></i> Financials</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'accounts/create' %>"><i class="fa fa-fw fa-calculator fa-m-fix"></i> Closing Stock</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'product/create' %>"><i class="fa fa-fw fa-product-hunt fa-m-fix"></i> Product</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'inventory/create' %>"><i class="fa fa-fw fa-database fa-m-fix"></i> Inventory</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'sale/create' %>"><i class="fa fa-fw fa-money fa-m-fix"></i> Sales</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'expenditure/create' %>"><i class="fa fa-fw fa-clipboard fa-m-fix"></i> Expenditures</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'projection/update' %>"><i class="fa fa-fw fa-wrench fa-m-fix"></i> Cashflow Projection</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+                <li class="sidebar-sub-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-indent fa-m-fix"></i> Actions</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'fields/create' %>"><i class="fa fa-fw fa-map-marker fa-m-fix"></i> Fields/Sheds/Yards</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'tasks/create' %>"><i class="fa fa-fw fa-tasks fa-m-fix"></i> Tasks</a>
+                </li>
+                <!-- <li> -->
+                <!-- <a href="<%= efarmxURL + 'weather/create' %>"><i class="fa fa-fw fa-skyatlas fa-m-fix"></i> AutoWeather</a> -->
+                <!-- </li> -->
+                <li>
+                    <a href="<%= efarmxURL + 'grazing/create' %>"><i class="fa fa-fw fa-retweet fa-m-fix"></i> Grazing Rotation</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'rotation/create' %>"><i class="fa fa-fw fa-th fa-m-fix"></i> Forage/Crop Rotation</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'weighing/create' %>"><i class="fa fa-fw fa-anchor fa-m-fix"></i> Weighbridge</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'staff/create' %>"><i class="fa fa-fw fa-users fa-m-fix"></i> Staff</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'soilanalysis/create' %>"><i class="fa fa-fw fa-flask fa-m-fix"></i> Soil Analysis</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+                <li class="sidebar-sub-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-indent fa-m-fix"></i> Animal Management</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'grassland/create' %>"><i class="fa fa-fw fa-balance-scale fa-m-fix"></i> Grassland Management</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'flockRegister/create' %>"><i class="fa fa-fw fa-microchip fa-m-fix"></i> Flock Register</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'flockDispatch/create' %>"><i class="fa fa-fw fa-file fa-m-fix"></i> Flock Dispatch Record</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'animalRegistration/create' %>"><i class="fa fa-fw fa-venus-mars fa-m-fix"></i> Animal Registration</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'animalCard/create' %>"><i class="fa fa-fw fa-sticky-note fa-m-fix"></i> Replacement Animal Document</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'tempAnimalMovement/create' %>"><i class="fa fa-fw fa-truck fa-m-fix"></i> Temporary Animal Movement</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+                <li class="sidebar-sub-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-indent fa-m-fix"></i> Nitrate Management</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'fertiliserPlanning/create' %>"><i class="fa fa-fw fa-leaf fa-m-fix"></i> Fertiliser Planning</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'movementOrganicFertiliser/create' %>"><i class="fa fa-fw fa-paw fa-m-fix"></i> Movement of Organic Fertiliser</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'storageCapacity/create' %>"><i class="fa fa-fw fa-cubes fa-m-fix"></i> Storage Capacity</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'rainfallStorage/create' %>"><i class="fa fa-fw fa-codepen fa-m-fix"></i> Rainfall Storage</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'storageTankCapacity/create' %>"><i class="fa fa-fw fa-cube fa-m-fix"></i> Storage Tank Capacity</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'nitrateLimitPerHectare/create' %>"><i class="fa fa-fw fa-hourglass-end fa-m-fix"></i> Nitrate Limit Per Hectare</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'maxAvailNAllowance/create' %>"><i class="fa fa-fw fa-sliders fa-m-fix"></i> Max Available Nitrogen Allow.</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'sourceNitrogen/create' %>"><i class="fa fa-fw fa-recycle fa-m-fix"></i> Source of Nitrogen</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'maxAvailPAllowance/create' %>"><i class="fa fa-fw fa-sliders fa-m-fix"></i> Max Available Phosphorus Allow.</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'sourcePhosphorus/create' %>"><i class="fa fa-fw fa-recycle fa-m-fix"></i> Source of Phosphorus</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+            </ul>
+        </div>
+
+        <div id="sidebar-wrapper" class="non-scrollify">
+            <ul class="sidebar-nav">
+
+                <!-- Ecosystem -->
+                <li class="sidebar-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-home fa-m-fix"></i> Ecosystem</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr">
+                </li>
+                <li class="sidebar-sub-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-indent fa-m-fix"></i> Financials</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'accounts/show' %>"><i class="fa fa-fw fa-line-chart fa-m-fix"></i> Accounting Year</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'accounts/list' %>"><i class="fa fa-fw fa-calculator fa-m-fix"></i> Closing Stock</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'inventory/list' %>"><i class="fa fa-fw fa-database fa-m-fix"></i> Inventory</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'sale/list' %>"><i class="fa fa-fw fa-money fa-m-fix"></i> Sales</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'expenditure/list' %>"><i class="fa fa-fw fa-clipboard fa-m-fix"></i> Expenditures</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'projection/list' %>"><i class="fa fa-fw fa-wrench fa-m-fix"></i> Cashflow Projection</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+                <li class="sidebar-sub-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-indent fa-m-fix"></i> Actions</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'fields/list' %>"><i class="fa fa-fw fa-map-marker fa-m-fix"></i> Fields/Sheds/Yards</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'tasks/list' %>"><i class="fa fa-fw fa-tasks fa-m-fix"></i> Tasks</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'weather/list' %>"><i class="fa fa-fw fa-skyatlas fa-m-fix"></i> AutoWeather</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'grazing/list' %>"><i class="fa fa-fw fa-retweet fa-m-fix"></i> Grazing Rotation</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'rotation/list' %>"><i class="fa fa-fw fa-th fa-m-fix"></i> Forage/Crop Rotation</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'weighing/list' %>"><i class="fa fa-fw fa-anchor fa-m-fix"></i> Weighbridge</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'staff/list' %>"><i class="fa fa-fw fa-users fa-m-fix"></i> Staff</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'soilanalysis/list' %>"><i class="fa fa-fw fa-flask fa-m-fix"></i> Soil Analysis</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+                <li class="sidebar-sub-brand">
+                <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-indent fa-m-fix"></i> Telemetry</a>
+                </li>
+                <li>
+                <a href="<%= efarmxURL + 'satelliteAnalysis/satelliteAnalysis' %>"><i class="fa fa-fw fa-map-o fa-m-fix"></i> Satellite Analysis</a>
+                </li>
+                <li>
+                <a href="<%= efarmxURL + 'terrainAnalysis/terrainAnalysis' %>"><i class="fa fa-fw fa-map-o fa-m-fix"></i> 3D Terrain Analysis</a>
+                </li>
+                <li>
+                <a href="<%= efarmxURL + 'gpsMonitor/gpsMonitor' %>"><i class="fa fa-fw fa-map-pin fa-m-fix"></i> GPS Monitor</a>
+                </li>
+                <!-- <li>
+                <a href="<%= efarmxURL + 'assetMonitor' %>"><i class="fa fa-fw fa-map-pin fa-m-fix"></i> Asset Monitor</a>
+                </li>
+                <li>
+                <a href="<%= efarmxURL + 'fieldCoPilot' %>"><i class="fa fa-fw fa-crosshairs fa-m-fix"></i> Field CoPilot&nbsp;<sup><small>TM</small></sup></a>
+                </li>
+                <li>
+                <a href="<%= efarmxURL + 'droneAnalysis' %>"><i class="fa fa-fw fa-arrows-alt fa-m-fix"></i> Drone Analysis</a>
+                </li>
+                <li>
+                <a href="<%= efarmxURL + 'smartGlasses' %>"><i class="fa fa-fw fa-window-restore fa-m-fix"></i> Smart Glasses</a>
+                </li> -->
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+                <li class="sidebar-sub-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-indent fa-m-fix"></i> Animal Management</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'grassland/list' %>"><i class="fa fa-fw fa-balance-scale fa-m-fix"></i> Grassland Management</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'flockRegister/list' %>"><i class="fa fa-fw fa-microchip fa-m-fix"></i> Flock Register</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'flockDispatch/list' %>"><i class="fa fa-fw fa-file fa-m-fix"></i> Flock Dispatch Record</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'animalRegistration/list' %>"><i class="fa fa-fw fa-venus-mars fa-m-fix"></i> Animal Registration</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'animalCard/list' %>"><i class="fa fa-fw fa-sticky-note fa-m-fix"></i> Replacement Animal Document</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'tempAnimalMovement/list' %>"><i class="fa fa-fw fa-truck fa-m-fix"></i> Temporary Animal Movement</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'traceelements/table' %>"><i class="fa fa-fw fa-eyedropper fa-m-fix"></i> Trace Elements Table</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+                <li class="sidebar-sub-brand">
+                    <a href="<%= efarmxURL %>"><i class="fa fa-fw fa-indent fa-m-fix"></i> Nitrate Management</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'fertiliserPlanning/list' %>"><i class="fa fa-fw fa-leaf fa-m-fix"></i> Fertiliser Planning</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'movementOrganicFertiliser/list' %>"><i class="fa fa-fw fa-paw fa-m-fix"></i> Movement of Organic Fertiliser</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'storageCapacity/list' %>"><i class="fa fa-fw fa-cubes fa-m-fix"></i> Storage Capacity</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'rainfallStorage/list' %>"><i class="fa fa-fw fa-codepen fa-m-fix"></i> Rainfall Storage</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'storageTankCapacity/list' %>"><i class="fa fa-fw fa-cube fa-m-fix"></i> Storage Tank Capacity</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'nitrateLimitPerHectare/list' %>"><i class="fa fa-fw fa-hourglass-end fa-m-fix"></i> Nitrate Limit Per Hectare</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'maxAvailNAllowance/list' %>"><i class="fa fa-fw fa-sliders fa-m-fix"></i> Max Available Nitrogen Allow.</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'sourceNitrogen/list' %>"><i class="fa fa-fw fa-recycle fa-m-fix"></i> Source of Nitrogen</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'maxAvailPAllowance/list' %>"><i class="fa fa-fw fa-sliders fa-m-fix"></i> Max Available Phosphorus Allow.</a>
+                </li>
+                <li>
+                    <a href="<%= efarmxURL + 'sourcePhosphorus/list' %>"><i class="fa fa-fw fa-recycle fa-m-fix"></i> Source of Phosphorus</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+                <li>
+                    <hr class="sidebar-hr">
+                </li>
+
+                <!-- GENERAL -->
+                <% if (locals.user) { %>
+                    <li class="sidebar-brand">
+                        <a href="/profile"><i class="fa fa-fw fa-user-circle-o fa-m-fix"></i> <%=user.local.name.firstname%></a>
+                    </li>
+                    <li>
+                        <hr class="sidebar-hr">
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <a href="/profile"><i class="fa fa-fw fa-th-large fa-m-fix"></i> Profile</a>
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <a href="/settings"><i class="fa fa-fw fa-cogs fa-m-fix"></i> Settings</a>
+                    </li>
+                    <!-- <li class="sidebar-sub-brand">
+                        <a href="#" class="toggle-theme"><i class="fa fa-fw fa-toggle-on fa-m-fix"></i> Toggle Theme</a>
+                    </li> -->
+                    <li class="sidebar-sub-brand">
+                        <a href="/logout"><i class="fa fa-fw fa-sign-out fa-m-fix"></i> Logout</a>
+                    </li>
+                    <li>
+                        <hr class="sidebar-hr sidebar-short">
+                    </li>
+                <% } else { %>
+                    <li class="sidebar-brand">
+                        <a href="/signup"><i class="fa fa-fw fa-user-circle-o fa-m-fix"></i> Account</a>
+                    </li>
+                    <li>
+                        <hr class="sidebar-hr">
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <a href="/login"><i class="fa fa-fw fa-sign-in fa-m-fix"></i> Login</a>
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <a href="/signup"><i class="fa fa-fw fa-user-plus fa-m-fix"></i> Sign Up</a>
+                    </li>
+                    <li class="sidebar-sub-brand">
+                        <a href="/quick-signup"><i class="fa fa-fw fa-user-plus fa-m-fix"></i> Quick Sign Up</a>
+                    </li>
+                    <!-- <li class="sidebar-sub-brand">
+                        <a href="#" class="toggle-theme"><i class="fa fa-fw fa-toggle-on fa-m-fix"></i> Toggle Theme</a>
+                    </li> -->
+                    <li>
+                        <hr class="sidebar-hr sidebar-short">
+                    </li>
+                <% } %>
+
+                <li class="sidebar-brand">
+                    <a href="/pricing"><i class="fa fa-fw fa-indent fa-m-fix"></i> Pricing</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr sidebar-short">
+                </li>
+               <!-- <li class="sidebar-brand">
+                    <a href="/promote"><i class="fa fa-fw fa-address-card fa-m-fix"></i> Promote</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr">
+                </li> -->
+                <li class="sidebar-brand">
+                    <a href="/about"><i class="fa fa-fw fa-info-circle fa-m-fix"></i> About Us</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr">
+                </li>
+                <li class="sidebar-brand">
+                    <a href="/contact"><i class="fa fa-fw fa-pencil-square-o fa-m-fix"></i> Contact Us</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr">
+                </li>
+                <li class="sidebar-brand">
+                    <a href="/"><i class="fa fa-fw fa-rocket fa-m-fix"></i> Launchpad</a>
+                </li>
+                <li>
+                    <hr class="sidebar-hr">
+                </li>
+            </ul>
+        </div>
+        <div class="nav-filler">
+        </div> <!-- filler ends here -->

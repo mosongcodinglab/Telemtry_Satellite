@@ -1,0 +1,176 @@
+{% load static%}
+
+<html>
+<head>
+  <title>EFarm Ecosystem</title>
+  <link rel="stylesheet" href="{% static 'style2.css' %}">
+  {{ map.header.render|safe }}
+  {{ MyField.header.render|safe }}
+  {{ Sentinel_Imagery.header.render|safe }}
+  {{ NDVI.header.render|safe }}
+  {{ EVI.header.render|safe }} 
+  {{ MSAVI.header.render|safe }}  
+  {{ NDWI.header.render|safe }}  
+  {{ precipitation.header.render|safe }}  
+  {{ Acres.header.render|safe }} 
+  {{ Hectares.header.render|safe }} 
+  {{ Kilometers.header.render|safe }} 
+  {{ areameters.header.render|safe }} 
+  {{ LandUseLandCover.header.render|safe }} 
+  {{ True_Colour.header.render|safe }} 
+  {{ False_Colour.header.render|safe }}   
+  {{ Crop_Health.header.render|safe }}
+  {{ LST.header.render|safe }}   
+   
+  
+  
+</head>
+
+<body>
+
+<div class="titlesection">
+  <h3> <span class="mapsection">Satellite Imagery </span>  <span class="Analysissection">Imagery Analysis</span></h3>
+     
+</div>
+
+
+  <div class="maparea">
+    {{map.html.render|safe}}
+    {{MyField.html.render|safe}}  
+    {{Sentinel_Imagery.html.render|safe}}  
+    {{NDVI.html.render|safe}}  
+    {{EVI.html.render|safe}} 
+    {{MSAVI.html.render|safe}} 
+    {{NDWI.html.render|safe}}
+    {{precipitation.html.render|safe}} 
+    {{areameters.html.render|safe}}
+    {{Acres.html.render|safe}}
+    {{Hectares.html.render|safe}}
+    {{Kilometers.html.render|safe}} 
+    {{LandUseLandCover.html.render|safe}}
+    {{True_Colour.html.render|safe}} 
+    {{False_Colour.html.render|safe}} 
+    {{Crop_Health.html.render|safe}} 
+    {{LST.html.render|safe}} 
+
+
+    
+    
+  </div>
+
+<!--compenents start-->
+  <div class="compenents">
+
+<!--Region Select start-->
+<label for="Selectregion_dropdown">Field | Area</label><br>
+<select class="drop_select" onchange="location = this.value;">
+      <option value="" selected disabled> Select Region/Field</option>
+      <option value="{% url 'MyField' %}">Field 1</option>
+      <option value="option2">Field 2</option>
+      <option value="option3">Field 3</option>
+    </select>
+    <br>
+    <br>
+
+<!--Region Select End-->
+<label>Area Measured:</label><br>
+{% comment %} <p>Age: {{ Total_AreaSqKm }}</p> {% endcomment %}
+
+<textarea rows="1" cols="33" readonly>{{ areaestimate1 }}</textarea>
+<br>
+<br>
+<!--Area Units (Auto selects) start-->
+    <label for="Area_Units_dropdown">Area Unit (Auto selects):</label><br>
+    <select class="drop_select" onchange="location = this.value;">
+      <option selected disabled>Select Area Unit</option>
+      <option value="{% url 'areameters' %}">Meters</option>
+      <option value="{% url 'Acres' %}">Acres(s)</option>
+      <option value="{% url 'Hectares' %}">Hectares</option>
+      <option value="{% url 'Kilometers' %}">Kilometers</option>      
+    </select>
+    <br>
+    <br>
+<!--Area Units (Auto selects) End-->
+
+
+
+<!--Date Range Start-->
+<label for="DateRange_dropdown">Date Range:</label><br>
+
+<form style="width: 100px" method="post">
+  {% csrf_token %}
+  {{ form.as_table }}
+  <p><input style="color:black" type="submit" value="Selected"></p>
+</form>
+
+<br>
+<!--Date Range End-->
+
+
+<!--Satellite Datastart-->
+<label for="Satelite_Data_dropdown">Satellite Data:</label><br>
+<select class="drop_select" onchange="location = this.value;">
+  <option value="" selected disabled>Select Satelite Data</option>
+  <option value="{% url 'Sentinel_Imagery' %}">Sentinel 2 10m resolution/5 days</option>
+  <option value="#">Sentinel 1 10m resolution/5 days</option>
+  <option value="#">Landsat 8 30m resolution/ 14 days</option>
+  <option value="#">Landsat 9 30m resolution/ 14 days</option>
+</select>
+<br>
+<br>
+<!--Satellite Data End-->
+
+<!--Variable/spectral analysis start-->
+    <label for="spectral_dropdown">Variable | Spectral Analysis</label>
+    <select class="drop_select" onchange="location = this.value;">
+      <option value="" selected disabled>Variable/Spectral Analysis</option>
+      <option value="{% url 'NDVI' %}">NDVI(Normalized Difference Vegetation Index)</option>
+      <option value="{% url 'EVI' %}">EVI(Enhanced Vegetation Index)</option>
+      <option value="{% url 'NDWI' %}">NDWI( Normalized Difference Water Index)</option>
+      <option value="{% url 'MSAVI' %}">MSAVI(Modified Soil-Adjusted Vegetation Index)</option>
+      <option value="{% url 'Crop_Health' %}">Crop Health(Dense Vegetation Bands B11,B8,B2)</option>
+      <option value="{% url 'LandUseLandCover' %}">LULC(LandCover & LandUse)</option>
+      {% comment %} <option value="#">Crop Yield Estimate(Area, Health,Production Average)</option> {% endcomment %}
+      <option value="#">MBSI(Modified Bare Soil Index)</option>
+      <option value="#">NDMI(Normalized Difference Moisture Index)</option>
+      <option value="{% url 'LST' %}">LST(Land Surface Temperature)</option>
+      <option value="{% url 'True_Colour' %}">True Colour(Red/Green/Blue)-Default</option> 
+      <option value="{% url 'False_Colour' %}">False Colour(NIR/Red/Green)</option> 
+      <option value="#">Average Soil Temperature</option>
+      <option value="#">Wind-Air Mass Flow</option>
+      <option value="#">Precipitation</option>
+      <option value="#">Average Air Temperature</option>
+      <option value="#">Humidity</option>
+      <option value="#">Near-Surface Weather</option>
+      <option value="#">Global Forecast System</option>
+    </select>
+  <br>
+  <br>
+<!--Variable/spectral analysis End-->
+
+<label for="Analysis_dropdown">Analysis Chart:</label><br>
+</div>
+  <!--compenents End-->
+
+  <script>
+    {{ map.script.render|safe }}
+    {{ MyField.script.render|safe }}
+    {{ Sentinel_Imagery.script.render|safe }}
+    {{ NDVI.script.render|safe }}
+    {{ EVI.script.render|safe }}
+    {{ MSAVI.script.render|safe }}
+    {{ NDWI.script.render|safe }}
+    {{ precipitation.script.render|safe }}
+    {{ areameters.script.render|safe }}
+    {{ Acres.script.render|safe }}
+    {{ Hectares.script.render|safe }}
+    {{ Kilometers.script.render|safe }} 
+    {{ LandUseLandCover.script.render|safe }}  
+    {{ True_Colour.script.render|safe }}  
+    {{ False_Colour.script.render|safe }}  
+    {{ Crop_Health.script.render|safe }}  
+    {{ LST.script.render|safe }}  
+
+  </script>
+</body>
+</html>
