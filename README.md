@@ -13,6 +13,7 @@ Make sure you have python install and miniconda or anaconda installed.
 4): Then for an easy and faster way to install  geemap is by the use of Mamba library. 
 so, yo have to install Mamba library.
    conda install -n base mamba -c conda-forge
+   
 5): Then finally, will install the the geospatial libraries that are commonly used using a single command line known as "geospatial"
     mamba install -c conda-forge geospatial
 The geospatial package only helps you install commonly used packages for geospatial analysis and data visualization with only one command, making it easier to set up a conda environment for geospatial analysis and avoid dependency conflicts during installation. The geospatial package itself does not have any meaningful functions yet. After installation, you can continue to the commonly used geospatial packages as usual.
